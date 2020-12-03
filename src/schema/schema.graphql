@@ -6,51 +6,64 @@ directive @specifiedBy(
   url: String!
 ) on SCALAR
 
-""" @model """
-type Comment {
+"""@model"""
+type Bike {
   _id: GraphbackObjectID!
-  text: String
   description: String
 
-  """@manyToOne(field: 'comments', key: 'noteId')"""
-  note: Note
+  """
+  @oneToOne(key: 'ownerId')
+  @oneToOne
+  """
+  owner: User!
+
+  """@manyToOne(field: 'bikes', key: 'theftId')"""
+  theft: Theft
 }
 
-input CommentFilter {
+input BikeFilter {
   _id: GraphbackObjectIDInput
-  text: StringInput
   description: StringInput
-  noteId: GraphbackObjectIDInput
-  and: [CommentFilter!]
-  or: [CommentFilter!]
-  not: CommentFilter
+  ownerId: GraphbackObjectIDInput
+  theftId: GraphbackObjectIDInput
+  and: [BikeFilter!]
+  or: [BikeFilter!]
+  not: BikeFilter
 }
 
-type CommentResultList {
-  items: [Comment]!
+type BikeResultList {
+  items: [Bike]!
   offset: Int
   limit: Int
   count: Int
 }
 
-input CommentSubscriptionFilter {
-  and: [CommentSubscriptionFilter!]
-  or: [CommentSubscriptionFilter!]
-  not: CommentSubscriptionFilter
+input BikeSubscriptionFilter {
+  and: [BikeSubscriptionFilter!]
+  or: [BikeSubscriptionFilter!]
+  not: BikeSubscriptionFilter
   _id: GraphbackObjectIDInput
-  text: StringInput
   description: StringInput
 }
 
-input CreateCommentInput {
-  text: String
+input CreateBikeInput {
+  _id: GraphbackObjectID
   description: String
-  noteId: GraphbackObjectID
+  ownerId: GraphbackObjectID!
+  theftId: GraphbackObjectID
 }
 
-input CreateNoteInput {
-  title: String!
-  description: String
+input CreateTheftInput {
+  _id: GraphbackObjectID
+  date: String!
+  comments: String
+  ownerId: GraphbackObjectID!
+}
+
+input CreateUserInput {
+  _id: GraphbackObjectID
+  name: String!
+  contact: String!
 }
 
 scalar GraphbackObjectID
@@ -66,64 +79,36 @@ input GraphbackObjectIDInput {
   between: [GraphbackObjectID!]
 }
 
-input MutateCommentInput {
+input MutateBikeInput {
   _id: GraphbackObjectID!
-  text: String
   description: String
-  noteId: GraphbackObjectID
+  ownerId: GraphbackObjectID
+  theftId: GraphbackObjectID
 }
 
-input MutateNoteInput {
+input MutateTheftInput {
   _id: GraphbackObjectID!
-  title: String
-  description: String
+  date: String
+  comments: String
+  ownerId: GraphbackObjectID
+}
+
+input MutateUserInput {
+  _id: GraphbackObjectID!
+  name: String
+  contact: String
 }
 
 type Mutation {
-  createNote(input: CreateNoteInput!): Note
-  updateNote(input: MutateNoteInput!): Note
-  deleteNote(input: MutateNoteInput!): Note
-  createComment(input: CreateCommentInput!): Comment
-  updateComment(input: MutateCommentInput!): Comment
-  deleteComment(input: MutateCommentInput!): Comment
-}
-
-""" @model """
-type Note {
-  _id: GraphbackObjectID!
-  title: String!
-  description: String
-
-  """
-  @oneToMany(field: 'note', key: 'noteId')
-  @oneToMany(field: 'note')
-  """
-  comments(filter: CommentFilter): [Comment]!
-}
-
-input NoteFilter {
-  _id: GraphbackObjectIDInput
-  title: StringInput
-  description: StringInput
-  and: [NoteFilter!]
-  or: [NoteFilter!]
-  not: NoteFilter
-}
-
-type NoteResultList {
-  items: [Note]!
-  offset: Int
-  limit: Int
-  count: Int
-}
-
-input NoteSubscriptionFilter {
-  and: [NoteSubscriptionFilter!]
-  or: [NoteSubscriptionFilter!]
-  not: NoteSubscriptionFilter
-  _id: GraphbackObjectIDInput
-  title: StringInput
-  description: StringInput
+  createTheft(input: CreateTheftInput!): Theft
+  updateTheft(input: MutateTheftInput!): Theft
+  deleteTheft(input: MutateTheftInput!): Theft
+  createBike(input: CreateBikeInput!): Bike
+  updateBike(input: MutateBikeInput!): Bike
+  deleteBike(input: MutateBikeInput!): Bike
+  createUser(input: CreateUserInput!): User
+  updateUser(input: MutateUserInput!): User
+  deleteUser(input: MutateUserInput!): User
 }
 
 input OrderByInput {
@@ -137,11 +122,12 @@ input PageRequest {
 }
 
 type Query {
-  getDraftNotes: [Note]
-  getNote(id: GraphbackObjectID!): Note
-  findNotes(filter: NoteFilter, page: PageRequest, orderBy: OrderByInput): NoteResultList!
-  getComment(id: GraphbackObjectID!): Comment
-  findComments(filter: CommentFilter, page: PageRequest, orderBy: OrderByInput): CommentResultList!
+  getTheft(id: GraphbackObjectID!): Theft
+  findThefts(filter: TheftFilter, page: PageRequest, orderBy: OrderByInput): TheftResultList!
+  getBike(id: GraphbackObjectID!): Bike
+  findBikes(filter: BikeFilter, page: PageRequest, orderBy: OrderByInput): BikeResultList!
+  getUser(id: GraphbackObjectID!): User
+  findUsers(filter: UserFilter, page: PageRequest, orderBy: OrderByInput): UserResultList!
 }
 
 enum SortDirectionEnum {
@@ -163,10 +149,90 @@ input StringInput {
 }
 
 type Subscription {
-  newNote(filter: NoteSubscriptionFilter): Note!
-  updatedNote(filter: NoteSubscriptionFilter): Note!
-  deletedNote(filter: NoteSubscriptionFilter): Note!
-  newComment(filter: CommentSubscriptionFilter): Comment!
-  updatedComment(filter: CommentSubscriptionFilter): Comment!
-  deletedComment(filter: CommentSubscriptionFilter): Comment!
+  newTheft(filter: TheftSubscriptionFilter): Theft!
+  updatedTheft(filter: TheftSubscriptionFilter): Theft!
+  deletedTheft(filter: TheftSubscriptionFilter): Theft!
+  newBike(filter: BikeSubscriptionFilter): Bike!
+  updatedBike(filter: BikeSubscriptionFilter): Bike!
+  deletedBike(filter: BikeSubscriptionFilter): Bike!
+  newUser(filter: UserSubscriptionFilter): User!
+  updatedUser(filter: UserSubscriptionFilter): User!
+  deletedUser(filter: UserSubscriptionFilter): User!
+}
+
+"""@model"""
+type Theft {
+  _id: GraphbackObjectID!
+  date: String!
+
+  """
+  @oneToMany(field: 'theft', key: 'theftId')
+  @oneToMany(field: 'theft')
+  """
+  bikes(filter: BikeFilter): [Bike!]
+  comments: String
+
+  """
+  @oneToOne(key: 'ownerId')
+  @oneToOne
+  """
+  owner: User!
+}
+
+input TheftFilter {
+  _id: GraphbackObjectIDInput
+  date: StringInput
+  comments: StringInput
+  ownerId: GraphbackObjectIDInput
+  and: [TheftFilter!]
+  or: [TheftFilter!]
+  not: TheftFilter
+}
+
+type TheftResultList {
+  items: [Theft]!
+  offset: Int
+  limit: Int
+  count: Int
+}
+
+input TheftSubscriptionFilter {
+  and: [TheftSubscriptionFilter!]
+  or: [TheftSubscriptionFilter!]
+  not: TheftSubscriptionFilter
+  _id: GraphbackObjectIDInput
+  date: StringInput
+  comments: StringInput
+}
+
+"""@model"""
+type User {
+  _id: GraphbackObjectID!
+  name: String!
+  contact: String!
+}
+
+input UserFilter {
+  _id: GraphbackObjectIDInput
+  name: StringInput
+  contact: StringInput
+  and: [UserFilter!]
+  or: [UserFilter!]
+  not: UserFilter
+}
+
+type UserResultList {
+  items: [User]!
+  offset: Int
+  limit: Int
+  count: Int
+}
+
+input UserSubscriptionFilter {
+  and: [UserSubscriptionFilter!]
+  or: [UserSubscriptionFilter!]
+  not: UserSubscriptionFilter
+  _id: GraphbackObjectIDInput
+  name: StringInput
+  contact: StringInput
 }

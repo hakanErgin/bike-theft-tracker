@@ -8,7 +8,6 @@ import express from 'express';
 import http from 'http';
 import { loadConfigSync } from 'graphql-config';
 import { connectDB } from './db';
-import { noteResolvers } from './resolvers/noteResolvers';
 
 async function start() {
   const app = express();
@@ -19,9 +18,9 @@ async function start() {
   const config = loadConfigSync({
     extensions: [
       () => ({
-        name: graphbackExtension
-      })
-    ]
+        name: graphbackExtension,
+      }),
+    ],
   });
 
   const projectConfig = config.getDefault();
@@ -32,13 +31,13 @@ async function start() {
   const db = await connectDB();
 
   const { typeDefs, resolvers, contextCreator } = buildGraphbackAPI(modelDefs, {
-    dataProviderCreator: createMongoDbProvider(db)
+    dataProviderCreator: createMongoDbProvider(db),
   });
 
   const apolloServer = new ApolloServer({
     typeDefs,
-    resolvers: [resolvers, noteResolvers],
-    context: contextCreator
+    resolvers: [resolvers],
+    context: contextCreator,
   });
 
   apolloServer.applyMiddleware({ app });

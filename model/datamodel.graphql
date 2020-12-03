@@ -1,24 +1,39 @@
-""" @model """
-type Note {
+"""
+@model
+"""
+type Theft {
   _id: GraphbackObjectID!
-  title: String!
-  description: String
+  date: String!
   """
-  @oneToMany(field: 'note')
+  @oneToMany(field: 'theft')
   """
-  comments: [Comment]!
+  bikes: [Bike!]
+  comments: String
+  """
+  @oneToOne
+  """
+  owner: User!
 }
 
-""" @model """
-type Comment {
+"""
+@model
+"""
+type Bike {
   _id: GraphbackObjectID!
-  text: String
   description: String
-  roles: [String!]!
+  """
+  @oneToOne
+  """
+  owner: User!
 }
 
-type Query {
-  getDraftNotes: [Note]
+"""
+@model
+"""
+type User {
+  _id: GraphbackObjectID!
+  name: String!
+  contact: String!
 }
 
 scalar GraphbackObjectID
