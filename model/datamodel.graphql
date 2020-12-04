@@ -4,6 +4,7 @@
 type Theft {
   _id: GraphbackObjectID!
   date: String!
+  location: String!
   """
   @oneToMany(field: 'theft')
   """

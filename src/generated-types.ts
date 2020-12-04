@@ -61,6 +61,7 @@ export type CreateBikeInput = {
 export type CreateTheftInput = {
   _id?: Maybe<Scalars['GraphbackObjectID']>;
   date: Scalars['String'];
+  location: Scalars['String'];
   comments?: Maybe<Scalars['String']>;
   ownerId: Scalars['GraphbackObjectID'];
 };
@@ -93,6 +94,7 @@ export type MutateBikeInput = {
 export type MutateTheftInput = {
   _id: Scalars['GraphbackObjectID'];
   date?: Maybe<Scalars['String']>;
+  location?: Maybe<Scalars['String']>;
   comments?: Maybe<Scalars['String']>;
   ownerId?: Maybe<Scalars['GraphbackObjectID']>;
 };
@@ -298,6 +300,7 @@ export type Theft = {
   __typename?: 'Theft';
   _id: Scalars['GraphbackObjectID'];
   date: Scalars['String'];
+  location: Scalars['String'];
   /**
    * @oneToMany(field: 'theft', key: 'theftId')
    * @oneToMany(field: 'theft')
@@ -320,6 +323,7 @@ export type TheftBikesArgs = {
 export type TheftFilter = {
   _id?: Maybe<GraphbackObjectIdInput>;
   date?: Maybe<StringInput>;
+  location?: Maybe<StringInput>;
   comments?: Maybe<StringInput>;
   ownerId?: Maybe<GraphbackObjectIdInput>;
   and?: Maybe<Array<TheftFilter>>;
@@ -341,6 +345,7 @@ export type TheftSubscriptionFilter = {
   not?: Maybe<TheftSubscriptionFilter>;
   _id?: Maybe<GraphbackObjectIdInput>;
   date?: Maybe<StringInput>;
+  location?: Maybe<StringInput>;
   comments?: Maybe<StringInput>;
 };
 
