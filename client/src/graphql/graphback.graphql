@@ -1,43 +1,66 @@
-fragment NoteFields on Note {
+fragment TheftFields on Theft {
    _id
-   title
-   description
+   date
+   location
+   comments
 
 } 
 
-fragment NoteExpandedFields on Note {
+fragment TheftExpandedFields on Theft {
    _id
-   title
-   description
-   comments {
+   date
+   location
+   bikes {
       _id
-      text
       description
+   }   comments
+   owner {
+      _id
+      name
+      contact
    }
 } 
 
-fragment CommentFields on Comment {
+fragment BikeFields on Bike {
    _id
-   text
    description
 
 } 
 
-fragment CommentExpandedFields on Comment {
+fragment BikeExpandedFields on Bike {
    _id
-   text
    description
-   note {
+   owner {
       _id
-      title
-      description
+      name
+      contact
+   }
+   theft {
+      _id
+      date
+      location
+      comments
    }
 } 
 
-query findNotes($filter: NoteFilter, $page: PageRequest, $orderBy: OrderByInput) {
-    findNotes(filter: $filter, page: $page, orderBy: $orderBy) {
+fragment UserFields on User {
+   _id
+   name
+   contact
+
+} 
+
+fragment UserExpandedFields on User {
+   _id
+   name
+   contact
+
+} 
+
+query findThefts($filter: TheftFilter, $page: PageRequest, $orderBy: OrderByInput) {
+    findThefts(filter: $filter, page: $page, orderBy: $orderBy) {
       items {
-        ...NoteExpandedFields
+        ...TheftExpandedFields
       }
       offset
       limit
@@ -45,16 +68,16 @@ query findNotes($filter: NoteFilter, $page: PageRequest, $orderBy: OrderByInput)
     }
   }
 
-query getNote($id: ID!) {
-    getNote(id: $id) {
-      ...NoteExpandedFields
+query getTheft($id: GraphbackObjectID!) {
+    getTheft(id: $id) {
+      ...TheftExpandedFields
     }
   }
 
-query findComments($filter: CommentFilter, $page: PageRequest, $orderBy: OrderByInput) {
-    findComments(filter: $filter, page: $page, orderBy: $orderBy) {
+query findBikes($filter: BikeFilter, $page: PageRequest, $orderBy: OrderByInput) {
+    findBikes(filter: $filter, page: $page, orderBy: $orderBy) {
       items {
-        ...CommentExpandedFields
+        ...BikeExpandedFields
       }
       offset
       limit
@@ -62,86 +85,142 @@ query findComments($filter: CommentFilter, $page: PageRequest, $orderBy: OrderBy
     }
   }
 
-query getComment($id: ID!) {
-    getComment(id: $id) {
-      ...CommentExpandedFields
+query getBike($id: GraphbackObjectID!) {
+    getBike(id: $id) {
+      ...BikeExpandedFields
     }
   }
 
-mutation createNote($input: CreateNoteInput!) {
-  createNote(input: $input) {
-      ...NoteFields
+query findUsers($filter: UserFilter, $page: PageRequest, $orderBy: OrderByInput) {
+    findUsers(filter: $filter, page: $page, orderBy: $orderBy) {
+      items {
+        ...UserExpandedFields
+      }
+      offset
+      limit
+      count
+    }
+  }
+
+query getUser($id: GraphbackObjectID!) {
+    getUser(id: $id) {
+      ...UserExpandedFields
+    }
+  }
+
+mutation createTheft($input: CreateTheftInput!) {
+  createTheft(input: $input) {
+      ...TheftFields
   }
 }
 
 
-mutation updateNote($input: MutateNoteInput!) {
-  updateNote(input: $input) {
-      ...NoteFields
+mutation updateTheft($input: MutateTheftInput!) {
+  updateTheft(input: $input) {
+      ...TheftFields
   }
 }
 
 
-mutation deleteNote($input: MutateNoteInput!) {
-  deleteNote(input: $input) {
-      ...NoteFields
+mutation deleteTheft($input: MutateTheftInput!) {
+  deleteTheft(input: $input) {
+      ...TheftFields
   }
 }
 
 
-mutation createComment($input: CreateCommentInput!) {
-  createComment(input: $input) {
-      ...CommentFields
+mutation createBike($input: CreateBikeInput!) {
+  createBike(input: $input) {
+      ...BikeFields
   }
 }
 
 
-mutation updateComment($input: MutateCommentInput!) {
-  updateComment(input: $input) {
-      ...CommentFields
+mutation updateBike($input: MutateBikeInput!) {
+  updateBike(input: $input) {
+      ...BikeFields
   }
 }
 
 
-mutation deleteComment($input: MutateCommentInput!) {
-  deleteComment(input: $input) {
-      ...CommentFields
+mutation deleteBike($input: MutateBikeInput!) {
+  deleteBike(input: $input) {
+      ...BikeFields
   }
 }
 
 
-subscription newNote($filter: NoteSubscriptionFilter) {
-  newNote(filter: $filter) {
-      ...NoteFields
+mutation createUser($input: CreateUserInput!) {
+  createUser(input: $input) {
+      ...UserFields
+  }
+}
+
+
+mutation updateUser($input: MutateUserInput!) {
+  updateUser(input: $input) {
+      ...UserFields
+  }
+}
+
+
+mutation deleteUser($input: MutateUserInput!) {
+  deleteUser(input: $input) {
+      ...UserFields
+  }
+}
+
+
+subscription newTheft($filter: TheftSubscriptionFilter) {
+  newTheft(filter: $filter) {
+      ...TheftFields
   }
 } 
 
-subscription updatedNote($filter: NoteSubscriptionFilter) {
-  updatedNote(filter: $filter) {
-      ...NoteFields
+subscription updatedTheft($filter: TheftSubscriptionFilter) {
+  updatedTheft(filter: $filter) {
+      ...TheftFields
   }
 } 
 
-subscription deletedNote($filter: NoteSubscriptionFilter) {
-  deletedNote(filter: $filter) {
-      ...NoteFields
+subscription deletedTheft($filter: TheftSubscriptionFilter) {
+  deletedTheft(filter: $filter) {
+      ...TheftFields
   }
 } 
 
-subscription newComment($filter: CommentSubscriptionFilter) {
-  newComment(filter: $filter) {
-      ...CommentFields
+subscription newBike($filter: BikeSubscriptionFilter) {
+  newBike(filter: $filter) {
+      ...BikeFields
   }
 } 
 
-subscription updatedComment($filter: CommentSubscriptionFilter) {
-  updatedComment(filter: $filter) {
-      ...CommentFields
+subscription updatedBike($filter: BikeSubscriptionFilter) {
+  updatedBike(filter: $filter) {
+      ...BikeFields
   }
 } 
 
-subscription deletedComment($filter: CommentSubscriptionFilter) {
-  deletedComment(filter: $filter) {
-      ...CommentFields
+subscription deletedBike($filter: BikeSubscriptionFilter) {
+  deletedBike(filter: $filter) {
+      ...BikeFields
+  }
+} 
+
+subscription newUser($filter: UserSubscriptionFilter) {
+  newUser(filter: $filter) {
+      ...UserFields
+  }
+} 
+
+subscription updatedUser($filter: UserSubscriptionFilter) {
+  updatedUser(filter: $filter) {
+      ...UserFields
+  }
+} 
+
+subscription deletedUser($filter: UserSubscriptionFilter) {
+  deletedUser(filter: $filter) {
+      ...UserFields
   }
 } 

@@ -2,7 +2,9 @@
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -10,166 +12,149 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  GraphbackObjectID: string;
 };
 
-/**  @model  */
-export type Comment = {
-  __typename?: 'Comment';
-  /**  @id  */
-  _id: Scalars['ID'];
-  text?: Maybe<Scalars['String']>;
+/** @model */
+export type Bike = {
+  __typename?: 'Bike';
+  _id: Scalars['GraphbackObjectID'];
   description?: Maybe<Scalars['String']>;
-  /** @manyToOne(field: 'comments', key: 'noteId') */
-  note?: Maybe<Note>;
+  /**
+   * @oneToOne(key: 'ownerId')
+   * @oneToOne
+   */
+  owner: User;
+  /** @manyToOne(field: 'bikes', key: 'theftId') */
+  theft?: Maybe<Theft>;
 };
 
-export type CommentFilter = {
-  _id?: Maybe<IdInput>;
-  text?: Maybe<StringInput>;
+export type BikeFilter = {
+  _id?: Maybe<GraphbackObjectIdInput>;
   description?: Maybe<StringInput>;
-  noteId?: Maybe<IdInput>;
-  and?: Maybe<Array<CommentFilter>>;
-  or?: Maybe<Array<CommentFilter>>;
-  not?: Maybe<CommentFilter>;
+  ownerId?: Maybe<GraphbackObjectIdInput>;
+  theftId?: Maybe<GraphbackObjectIdInput>;
+  and?: Maybe<Array<BikeFilter>>;
+  or?: Maybe<Array<BikeFilter>>;
+  not?: Maybe<BikeFilter>;
 };
 
-export type CommentResultList = {
-  __typename?: 'CommentResultList';
-  items: Array<Maybe<Comment>>;
+export type BikeResultList = {
+  __typename?: 'BikeResultList';
+  items: Array<Maybe<Bike>>;
   offset?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   count?: Maybe<Scalars['Int']>;
 };
 
-export type CommentSubscriptionFilter = {
-  and?: Maybe<Array<CommentSubscriptionFilter>>;
-  or?: Maybe<Array<CommentSubscriptionFilter>>;
-  not?: Maybe<CommentSubscriptionFilter>;
-  _id?: Maybe<IdInput>;
-  text?: Maybe<StringInput>;
+export type BikeSubscriptionFilter = {
+  and?: Maybe<Array<BikeSubscriptionFilter>>;
+  or?: Maybe<Array<BikeSubscriptionFilter>>;
+  not?: Maybe<BikeSubscriptionFilter>;
+  _id?: Maybe<GraphbackObjectIdInput>;
   description?: Maybe<StringInput>;
 };
 
-export type CreateCommentInput = {
-  _id?: Maybe<Scalars['ID']>;
-  text?: Maybe<Scalars['String']>;
+export type CreateBikeInput = {
+  _id?: Maybe<Scalars['GraphbackObjectID']>;
   description?: Maybe<Scalars['String']>;
-  noteId?: Maybe<Scalars['ID']>;
+  ownerId: Scalars['GraphbackObjectID'];
+  theftId?: Maybe<Scalars['GraphbackObjectID']>;
 };
 
-export type CreateNoteInput = {
-  _id?: Maybe<Scalars['ID']>;
-  title: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
+export type CreateTheftInput = {
+  _id?: Maybe<Scalars['GraphbackObjectID']>;
+  date: Scalars['String'];
+  location: Scalars['String'];
+  comments?: Maybe<Scalars['String']>;
+  ownerId: Scalars['GraphbackObjectID'];
 };
 
-export type IdInput = {
-  ne?: Maybe<Scalars['ID']>;
-  eq?: Maybe<Scalars['ID']>;
-  le?: Maybe<Scalars['ID']>;
-  lt?: Maybe<Scalars['ID']>;
-  ge?: Maybe<Scalars['ID']>;
-  gt?: Maybe<Scalars['ID']>;
-  in?: Maybe<Array<Scalars['ID']>>;
+export type CreateUserInput = {
+  _id?: Maybe<Scalars['GraphbackObjectID']>;
+  name: Scalars['String'];
+  contact: Scalars['String'];
 };
 
-export type MutateCommentInput = {
-  _id: Scalars['ID'];
-  text?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  noteId?: Maybe<Scalars['ID']>;
+export type GraphbackObjectIdInput = {
+  ne?: Maybe<Scalars['GraphbackObjectID']>;
+  eq?: Maybe<Scalars['GraphbackObjectID']>;
+  le?: Maybe<Scalars['GraphbackObjectID']>;
+  lt?: Maybe<Scalars['GraphbackObjectID']>;
+  ge?: Maybe<Scalars['GraphbackObjectID']>;
+  gt?: Maybe<Scalars['GraphbackObjectID']>;
+  in?: Maybe<Array<Scalars['GraphbackObjectID']>>;
+  between?: Maybe<Array<Scalars['GraphbackObjectID']>>;
 };
 
-export type MutateNoteInput = {
-  _id: Scalars['ID'];
-  title?: Maybe<Scalars['String']>;
+export type MutateBikeInput = {
+  _id: Scalars['GraphbackObjectID'];
   description?: Maybe<Scalars['String']>;
+  ownerId?: Maybe<Scalars['GraphbackObjectID']>;
+  theftId?: Maybe<Scalars['GraphbackObjectID']>;
+};
+
+export type MutateTheftInput = {
+  _id: Scalars['GraphbackObjectID'];
+  date?: Maybe<Scalars['String']>;
+  location?: Maybe<Scalars['String']>;
+  comments?: Maybe<Scalars['String']>;
+  ownerId?: Maybe<Scalars['GraphbackObjectID']>;
+};
+
+export type MutateUserInput = {
+  _id: Scalars['GraphbackObjectID'];
+  name?: Maybe<Scalars['String']>;
+  contact?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createNote?: Maybe<Note>;
-  updateNote?: Maybe<Note>;
-  deleteNote?: Maybe<Note>;
-  createComment?: Maybe<Comment>;
-  updateComment?: Maybe<Comment>;
-  deleteComment?: Maybe<Comment>;
+  createTheft?: Maybe<Theft>;
+  updateTheft?: Maybe<Theft>;
+  deleteTheft?: Maybe<Theft>;
+  createBike?: Maybe<Bike>;
+  updateBike?: Maybe<Bike>;
+  deleteBike?: Maybe<Bike>;
+  createUser?: Maybe<User>;
+  updateUser?: Maybe<User>;
+  deleteUser?: Maybe<User>;
 };
 
-
-export type MutationCreateNoteArgs = {
-  input: CreateNoteInput;
+export type MutationCreateTheftArgs = {
+  input: CreateTheftInput;
 };
 
-
-export type MutationUpdateNoteArgs = {
-  input: MutateNoteInput;
+export type MutationUpdateTheftArgs = {
+  input: MutateTheftInput;
 };
 
-
-export type MutationDeleteNoteArgs = {
-  input: MutateNoteInput;
+export type MutationDeleteTheftArgs = {
+  input: MutateTheftInput;
 };
 
-
-export type MutationCreateCommentArgs = {
-  input: CreateCommentInput;
+export type MutationCreateBikeArgs = {
+  input: CreateBikeInput;
 };
 
-
-export type MutationUpdateCommentArgs = {
-  input: MutateCommentInput;
+export type MutationUpdateBikeArgs = {
+  input: MutateBikeInput;
 };
 
-
-export type MutationDeleteCommentArgs = {
-  input: MutateCommentInput;
+export type MutationDeleteBikeArgs = {
+  input: MutateBikeInput;
 };
 
-/**  @model  */
-export type Note = {
-  __typename?: 'Note';
-  /**  @id  */
-  _id: Scalars['ID'];
-  title: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-  /**
-   * @oneToMany(field: 'note', key: 'noteId')
-   * @oneToMany(field: 'note')
-   */
-  comments: Array<Maybe<Comment>>;
+export type MutationCreateUserArgs = {
+  input: CreateUserInput;
 };
 
-
-/**  @model  */
-export type NoteCommentsArgs = {
-  filter?: Maybe<CommentFilter>;
+export type MutationUpdateUserArgs = {
+  input: MutateUserInput;
 };
 
-export type NoteFilter = {
-  _id?: Maybe<IdInput>;
-  title?: Maybe<StringInput>;
-  description?: Maybe<StringInput>;
-  and?: Maybe<Array<NoteFilter>>;
-  or?: Maybe<Array<NoteFilter>>;
-  not?: Maybe<NoteFilter>;
-};
-
-export type NoteResultList = {
-  __typename?: 'NoteResultList';
-  items: Array<Maybe<Note>>;
-  offset?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
-  count?: Maybe<Scalars['Int']>;
-};
-
-export type NoteSubscriptionFilter = {
-  and?: Maybe<Array<NoteSubscriptionFilter>>;
-  or?: Maybe<Array<NoteSubscriptionFilter>>;
-  not?: Maybe<NoteSubscriptionFilter>;
-  _id?: Maybe<IdInput>;
-  title?: Maybe<StringInput>;
-  description?: Maybe<StringInput>;
+export type MutationDeleteUserArgs = {
+  input: MutateUserInput;
 };
 
 export type OrderByInput = {
@@ -184,40 +169,47 @@ export type PageRequest = {
 
 export type Query = {
   __typename?: 'Query';
-  getDraftNotes?: Maybe<Array<Maybe<Note>>>;
-  getNote?: Maybe<Note>;
-  findNotes: NoteResultList;
-  getComment?: Maybe<Comment>;
-  findComments: CommentResultList;
+  getTheft?: Maybe<Theft>;
+  findThefts: TheftResultList;
+  getBike?: Maybe<Bike>;
+  findBikes: BikeResultList;
+  getUser?: Maybe<User>;
+  findUsers: UserResultList;
 };
 
-
-export type QueryGetNoteArgs = {
-  id: Scalars['ID'];
+export type QueryGetTheftArgs = {
+  id: Scalars['GraphbackObjectID'];
 };
 
-
-export type QueryFindNotesArgs = {
-  filter?: Maybe<NoteFilter>;
+export type QueryFindTheftsArgs = {
+  filter?: Maybe<TheftFilter>;
   page?: Maybe<PageRequest>;
   orderBy?: Maybe<OrderByInput>;
 };
 
-
-export type QueryGetCommentArgs = {
-  id: Scalars['ID'];
+export type QueryGetBikeArgs = {
+  id: Scalars['GraphbackObjectID'];
 };
 
+export type QueryFindBikesArgs = {
+  filter?: Maybe<BikeFilter>;
+  page?: Maybe<PageRequest>;
+  orderBy?: Maybe<OrderByInput>;
+};
 
-export type QueryFindCommentsArgs = {
-  filter?: Maybe<CommentFilter>;
+export type QueryGetUserArgs = {
+  id: Scalars['GraphbackObjectID'];
+};
+
+export type QueryFindUsersArgs = {
+  filter?: Maybe<UserFilter>;
   page?: Maybe<PageRequest>;
   orderBy?: Maybe<OrderByInput>;
 };
 
 export enum SortDirectionEnum {
   Desc = 'DESC',
-  Asc = 'ASC'
+  Asc = 'ASC',
 }
 
 export type StringInput = {
@@ -235,397 +227,467 @@ export type StringInput = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  newNote: Note;
-  updatedNote: Note;
-  deletedNote: Note;
-  newComment: Comment;
-  updatedComment: Comment;
-  deletedComment: Comment;
+  newTheft: Theft;
+  updatedTheft: Theft;
+  deletedTheft: Theft;
+  newBike: Bike;
+  updatedBike: Bike;
+  deletedBike: Bike;
+  newUser: User;
+  updatedUser: User;
+  deletedUser: User;
 };
 
-
-export type SubscriptionNewNoteArgs = {
-  filter?: Maybe<NoteSubscriptionFilter>;
+export type SubscriptionNewTheftArgs = {
+  filter?: Maybe<TheftSubscriptionFilter>;
 };
 
-
-export type SubscriptionUpdatedNoteArgs = {
-  filter?: Maybe<NoteSubscriptionFilter>;
+export type SubscriptionUpdatedTheftArgs = {
+  filter?: Maybe<TheftSubscriptionFilter>;
 };
 
-
-export type SubscriptionDeletedNoteArgs = {
-  filter?: Maybe<NoteSubscriptionFilter>;
+export type SubscriptionDeletedTheftArgs = {
+  filter?: Maybe<TheftSubscriptionFilter>;
 };
 
-
-export type SubscriptionNewCommentArgs = {
-  filter?: Maybe<CommentSubscriptionFilter>;
+export type SubscriptionNewBikeArgs = {
+  filter?: Maybe<BikeSubscriptionFilter>;
 };
 
-
-export type SubscriptionUpdatedCommentArgs = {
-  filter?: Maybe<CommentSubscriptionFilter>;
+export type SubscriptionUpdatedBikeArgs = {
+  filter?: Maybe<BikeSubscriptionFilter>;
 };
 
-
-export type SubscriptionDeletedCommentArgs = {
-  filter?: Maybe<CommentSubscriptionFilter>;
+export type SubscriptionDeletedBikeArgs = {
+  filter?: Maybe<BikeSubscriptionFilter>;
 };
 
-export type GetDraftNotesQueryVariables = Exact<{ [key: string]: never; }>;
+export type SubscriptionNewUserArgs = {
+  filter?: Maybe<UserSubscriptionFilter>;
+};
 
+export type SubscriptionUpdatedUserArgs = {
+  filter?: Maybe<UserSubscriptionFilter>;
+};
 
-export type GetDraftNotesQuery = (
-  { __typename?: 'Query' }
-  & { getDraftNotes?: Maybe<Array<Maybe<(
-    { __typename?: 'Note' }
-    & NoteExpandedFieldsFragment
-  )>>> }
-);
+export type SubscriptionDeletedUserArgs = {
+  filter?: Maybe<UserSubscriptionFilter>;
+};
 
-export type NoteFieldsFragment = (
-  { __typename?: 'Note' }
-  & Pick<Note, '_id' | 'title' | 'description'>
-);
+/** @model */
+export type Theft = {
+  __typename?: 'Theft';
+  _id: Scalars['GraphbackObjectID'];
+  date: Scalars['String'];
+  location: Scalars['String'];
+  /**
+   * @oneToMany(field: 'theft', key: 'theftId')
+   * @oneToMany(field: 'theft')
+   */
+  bikes?: Maybe<Array<Bike>>;
+  comments?: Maybe<Scalars['String']>;
+  /**
+   * @oneToOne(key: 'ownerId')
+   * @oneToOne
+   */
+  owner: User;
+};
 
-export type NoteExpandedFieldsFragment = (
-  { __typename?: 'Note' }
-  & Pick<Note, '_id' | 'title' | 'description'>
-  & { comments: Array<Maybe<(
-    { __typename?: 'Comment' }
-    & Pick<Comment, '_id' | 'text' | 'description'>
-  )>> }
-);
+/** @model */
+export type TheftBikesArgs = {
+  filter?: Maybe<BikeFilter>;
+};
 
-export type CommentFieldsFragment = (
-  { __typename?: 'Comment' }
-  & Pick<Comment, '_id' | 'text' | 'description'>
-);
+export type TheftFilter = {
+  _id?: Maybe<GraphbackObjectIdInput>;
+  date?: Maybe<StringInput>;
+  location?: Maybe<StringInput>;
+  comments?: Maybe<StringInput>;
+  ownerId?: Maybe<GraphbackObjectIdInput>;
+  and?: Maybe<Array<TheftFilter>>;
+  or?: Maybe<Array<TheftFilter>>;
+  not?: Maybe<TheftFilter>;
+};
 
-export type CommentExpandedFieldsFragment = (
-  { __typename?: 'Comment' }
-  & Pick<Comment, '_id' | 'text' | 'description'>
-  & { note?: Maybe<(
-    { __typename?: 'Note' }
-    & Pick<Note, '_id' | 'title' | 'description'>
-  )> }
-);
+export type TheftResultList = {
+  __typename?: 'TheftResultList';
+  items: Array<Maybe<Theft>>;
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  count?: Maybe<Scalars['Int']>;
+};
 
-export type FindNotesQueryVariables = Exact<{
-  filter?: Maybe<NoteFilter>;
+export type TheftSubscriptionFilter = {
+  and?: Maybe<Array<TheftSubscriptionFilter>>;
+  or?: Maybe<Array<TheftSubscriptionFilter>>;
+  not?: Maybe<TheftSubscriptionFilter>;
+  _id?: Maybe<GraphbackObjectIdInput>;
+  date?: Maybe<StringInput>;
+  location?: Maybe<StringInput>;
+  comments?: Maybe<StringInput>;
+};
+
+/** @model */
+export type User = {
+  __typename?: 'User';
+  _id: Scalars['GraphbackObjectID'];
+  name: Scalars['String'];
+  contact: Scalars['String'];
+};
+
+export type UserFilter = {
+  _id?: Maybe<GraphbackObjectIdInput>;
+  name?: Maybe<StringInput>;
+  contact?: Maybe<StringInput>;
+  and?: Maybe<Array<UserFilter>>;
+  or?: Maybe<Array<UserFilter>>;
+  not?: Maybe<UserFilter>;
+};
+
+export type UserResultList = {
+  __typename?: 'UserResultList';
+  items: Array<Maybe<User>>;
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  count?: Maybe<Scalars['Int']>;
+};
+
+export type UserSubscriptionFilter = {
+  and?: Maybe<Array<UserSubscriptionFilter>>;
+  or?: Maybe<Array<UserSubscriptionFilter>>;
+  not?: Maybe<UserSubscriptionFilter>;
+  _id?: Maybe<GraphbackObjectIdInput>;
+  name?: Maybe<StringInput>;
+  contact?: Maybe<StringInput>;
+};
+
+export type TheftFieldsFragment = { __typename?: 'Theft' } & Pick<Theft, any>;
+
+export type TheftExpandedFieldsFragment = { __typename?: 'Theft' } & Pick<
+  Theft,
+  any
+> & {
+    bikes?: Maybe<Array<{ __typename?: 'Bike' } & Pick<Bike, any>>>;
+    owner: { __typename?: 'User' } & Pick<User, any>;
+  };
+
+export type BikeFieldsFragment = { __typename?: 'Bike' } & Pick<Bike, any>;
+
+export type BikeExpandedFieldsFragment = { __typename?: 'Bike' } & Pick<
+  Bike,
+  any
+> & {
+    owner: { __typename?: 'User' } & Pick<User, any>;
+    theft?: Maybe<{ __typename?: 'Theft' } & Pick<Theft, any>>;
+  };
+
+export type UserFieldsFragment = { __typename?: 'User' } & Pick<User, any>;
+
+export type UserExpandedFieldsFragment = { __typename?: 'User' } & Pick<
+  User,
+  any
+>;
+
+export type FindTheftsQueryVariables = Exact<{
+  filter?: Maybe<TheftFilter>;
   page?: Maybe<PageRequest>;
   orderBy?: Maybe<OrderByInput>;
 }>;
 
+export type FindTheftsQuery = { __typename?: 'Query' } & {
+  findThefts: { __typename?: 'TheftResultList' } & Pick<
+    TheftResultList,
+    any
+  > & {
+      items: Array<
+        Maybe<{ __typename?: 'Theft' } & TheftExpandedFieldsFragment>
+      >;
+    };
+};
 
-export type FindNotesQuery = (
-  { __typename?: 'Query' }
-  & { findNotes: (
-    { __typename?: 'NoteResultList' }
-    & Pick<NoteResultList, 'offset' | 'limit' | 'count'>
-    & { items: Array<Maybe<(
-      { __typename?: 'Note' }
-      & NoteExpandedFieldsFragment
-    )>> }
-  ) }
-);
-
-export type GetNoteQueryVariables = Exact<{
-  id: Scalars['ID'];
+export type GetTheftQueryVariables = Exact<{
+  id: Scalars['GraphbackObjectID'];
 }>;
 
+export type GetTheftQuery = { __typename?: 'Query' } & {
+  getTheft?: Maybe<{ __typename?: 'Theft' } & TheftExpandedFieldsFragment>;
+};
 
-export type GetNoteQuery = (
-  { __typename?: 'Query' }
-  & { getNote?: Maybe<(
-    { __typename?: 'Note' }
-    & NoteExpandedFieldsFragment
-  )> }
-);
-
-export type FindCommentsQueryVariables = Exact<{
-  filter?: Maybe<CommentFilter>;
+export type FindBikesQueryVariables = Exact<{
+  filter?: Maybe<BikeFilter>;
   page?: Maybe<PageRequest>;
   orderBy?: Maybe<OrderByInput>;
 }>;
 
+export type FindBikesQuery = { __typename?: 'Query' } & {
+  findBikes: { __typename?: 'BikeResultList' } & Pick<BikeResultList, any> & {
+      items: Array<Maybe<{ __typename?: 'Bike' } & BikeExpandedFieldsFragment>>;
+    };
+};
 
-export type FindCommentsQuery = (
-  { __typename?: 'Query' }
-  & { findComments: (
-    { __typename?: 'CommentResultList' }
-    & Pick<CommentResultList, 'offset' | 'limit' | 'count'>
-    & { items: Array<Maybe<(
-      { __typename?: 'Comment' }
-      & CommentExpandedFieldsFragment
-    )>> }
-  ) }
-);
-
-export type GetCommentQueryVariables = Exact<{
-  id: Scalars['ID'];
+export type GetBikeQueryVariables = Exact<{
+  id: Scalars['GraphbackObjectID'];
 }>;
 
+export type GetBikeQuery = { __typename?: 'Query' } & {
+  getBike?: Maybe<{ __typename?: 'Bike' } & BikeExpandedFieldsFragment>;
+};
 
-export type GetCommentQuery = (
-  { __typename?: 'Query' }
-  & { getComment?: Maybe<(
-    { __typename?: 'Comment' }
-    & CommentExpandedFieldsFragment
-  )> }
-);
-
-export type CreateNoteMutationVariables = Exact<{
-  input: CreateNoteInput;
+export type FindUsersQueryVariables = Exact<{
+  filter?: Maybe<UserFilter>;
+  page?: Maybe<PageRequest>;
+  orderBy?: Maybe<OrderByInput>;
 }>;
 
+export type FindUsersQuery = { __typename?: 'Query' } & {
+  findUsers: { __typename?: 'UserResultList' } & Pick<UserResultList, any> & {
+      items: Array<Maybe<{ __typename?: 'User' } & UserExpandedFieldsFragment>>;
+    };
+};
 
-export type CreateNoteMutation = (
-  { __typename?: 'Mutation' }
-  & { createNote?: Maybe<(
-    { __typename?: 'Note' }
-    & NoteFieldsFragment
-  )> }
-);
-
-export type UpdateNoteMutationVariables = Exact<{
-  input: MutateNoteInput;
+export type GetUserQueryVariables = Exact<{
+  id: Scalars['GraphbackObjectID'];
 }>;
 
+export type GetUserQuery = { __typename?: 'Query' } & {
+  getUser?: Maybe<{ __typename?: 'User' } & UserExpandedFieldsFragment>;
+};
 
-export type UpdateNoteMutation = (
-  { __typename?: 'Mutation' }
-  & { updateNote?: Maybe<(
-    { __typename?: 'Note' }
-    & NoteFieldsFragment
-  )> }
-);
-
-export type DeleteNoteMutationVariables = Exact<{
-  input: MutateNoteInput;
+export type CreateTheftMutationVariables = Exact<{
+  input: CreateTheftInput;
 }>;
 
+export type CreateTheftMutation = { __typename?: 'Mutation' } & {
+  createTheft?: Maybe<{ __typename?: 'Theft' } & TheftFieldsFragment>;
+};
 
-export type DeleteNoteMutation = (
-  { __typename?: 'Mutation' }
-  & { deleteNote?: Maybe<(
-    { __typename?: 'Note' }
-    & NoteFieldsFragment
-  )> }
-);
-
-export type CreateCommentMutationVariables = Exact<{
-  input: CreateCommentInput;
+export type UpdateTheftMutationVariables = Exact<{
+  input: MutateTheftInput;
 }>;
 
+export type UpdateTheftMutation = { __typename?: 'Mutation' } & {
+  updateTheft?: Maybe<{ __typename?: 'Theft' } & TheftFieldsFragment>;
+};
 
-export type CreateCommentMutation = (
-  { __typename?: 'Mutation' }
-  & { createComment?: Maybe<(
-    { __typename?: 'Comment' }
-    & CommentFieldsFragment
-  )> }
-);
-
-export type UpdateCommentMutationVariables = Exact<{
-  input: MutateCommentInput;
+export type DeleteTheftMutationVariables = Exact<{
+  input: MutateTheftInput;
 }>;
 
+export type DeleteTheftMutation = { __typename?: 'Mutation' } & {
+  deleteTheft?: Maybe<{ __typename?: 'Theft' } & TheftFieldsFragment>;
+};
 
-export type UpdateCommentMutation = (
-  { __typename?: 'Mutation' }
-  & { updateComment?: Maybe<(
-    { __typename?: 'Comment' }
-    & CommentFieldsFragment
-  )> }
-);
-
-export type DeleteCommentMutationVariables = Exact<{
-  input: MutateCommentInput;
+export type CreateBikeMutationVariables = Exact<{
+  input: CreateBikeInput;
 }>;
 
+export type CreateBikeMutation = { __typename?: 'Mutation' } & {
+  createBike?: Maybe<{ __typename?: 'Bike' } & BikeFieldsFragment>;
+};
 
-export type DeleteCommentMutation = (
-  { __typename?: 'Mutation' }
-  & { deleteComment?: Maybe<(
-    { __typename?: 'Comment' }
-    & CommentFieldsFragment
-  )> }
-);
-
-export type NewNoteSubscriptionVariables = Exact<{
-  filter?: Maybe<NoteSubscriptionFilter>;
+export type UpdateBikeMutationVariables = Exact<{
+  input: MutateBikeInput;
 }>;
 
+export type UpdateBikeMutation = { __typename?: 'Mutation' } & {
+  updateBike?: Maybe<{ __typename?: 'Bike' } & BikeFieldsFragment>;
+};
 
-export type NewNoteSubscription = (
-  { __typename?: 'Subscription' }
-  & { newNote: (
-    { __typename?: 'Note' }
-    & NoteFieldsFragment
-  ) }
-);
-
-export type UpdatedNoteSubscriptionVariables = Exact<{
-  filter?: Maybe<NoteSubscriptionFilter>;
+export type DeleteBikeMutationVariables = Exact<{
+  input: MutateBikeInput;
 }>;
 
+export type DeleteBikeMutation = { __typename?: 'Mutation' } & {
+  deleteBike?: Maybe<{ __typename?: 'Bike' } & BikeFieldsFragment>;
+};
 
-export type UpdatedNoteSubscription = (
-  { __typename?: 'Subscription' }
-  & { updatedNote: (
-    { __typename?: 'Note' }
-    & NoteFieldsFragment
-  ) }
-);
-
-export type DeletedNoteSubscriptionVariables = Exact<{
-  filter?: Maybe<NoteSubscriptionFilter>;
+export type CreateUserMutationVariables = Exact<{
+  input: CreateUserInput;
 }>;
 
+export type CreateUserMutation = { __typename?: 'Mutation' } & {
+  createUser?: Maybe<{ __typename?: 'User' } & UserFieldsFragment>;
+};
 
-export type DeletedNoteSubscription = (
-  { __typename?: 'Subscription' }
-  & { deletedNote: (
-    { __typename?: 'Note' }
-    & NoteFieldsFragment
-  ) }
-);
-
-export type NewCommentSubscriptionVariables = Exact<{
-  filter?: Maybe<CommentSubscriptionFilter>;
+export type UpdateUserMutationVariables = Exact<{
+  input: MutateUserInput;
 }>;
 
+export type UpdateUserMutation = { __typename?: 'Mutation' } & {
+  updateUser?: Maybe<{ __typename?: 'User' } & UserFieldsFragment>;
+};
 
-export type NewCommentSubscription = (
-  { __typename?: 'Subscription' }
-  & { newComment: (
-    { __typename?: 'Comment' }
-    & CommentFieldsFragment
-  ) }
-);
-
-export type UpdatedCommentSubscriptionVariables = Exact<{
-  filter?: Maybe<CommentSubscriptionFilter>;
+export type DeleteUserMutationVariables = Exact<{
+  input: MutateUserInput;
 }>;
 
+export type DeleteUserMutation = { __typename?: 'Mutation' } & {
+  deleteUser?: Maybe<{ __typename?: 'User' } & UserFieldsFragment>;
+};
 
-export type UpdatedCommentSubscription = (
-  { __typename?: 'Subscription' }
-  & { updatedComment: (
-    { __typename?: 'Comment' }
-    & CommentFieldsFragment
-  ) }
-);
-
-export type DeletedCommentSubscriptionVariables = Exact<{
-  filter?: Maybe<CommentSubscriptionFilter>;
+export type NewTheftSubscriptionVariables = Exact<{
+  filter?: Maybe<TheftSubscriptionFilter>;
 }>;
 
+export type NewTheftSubscription = { __typename?: 'Subscription' } & {
+  newTheft: { __typename?: 'Theft' } & TheftFieldsFragment;
+};
 
-export type DeletedCommentSubscription = (
-  { __typename?: 'Subscription' }
-  & { deletedComment: (
-    { __typename?: 'Comment' }
-    & CommentFieldsFragment
-  ) }
-);
+export type UpdatedTheftSubscriptionVariables = Exact<{
+  filter?: Maybe<TheftSubscriptionFilter>;
+}>;
 
-export const NoteFieldsFragmentDoc = gql`
-    fragment NoteFields on Note {
-  _id
-  title
-  description
-}
-    `;
-export const NoteExpandedFieldsFragmentDoc = gql`
-    fragment NoteExpandedFields on Note {
-  _id
-  title
-  description
-  comments {
+export type UpdatedTheftSubscription = { __typename?: 'Subscription' } & {
+  updatedTheft: { __typename?: 'Theft' } & TheftFieldsFragment;
+};
+
+export type DeletedTheftSubscriptionVariables = Exact<{
+  filter?: Maybe<TheftSubscriptionFilter>;
+}>;
+
+export type DeletedTheftSubscription = { __typename?: 'Subscription' } & {
+  deletedTheft: { __typename?: 'Theft' } & TheftFieldsFragment;
+};
+
+export type NewBikeSubscriptionVariables = Exact<{
+  filter?: Maybe<BikeSubscriptionFilter>;
+}>;
+
+export type NewBikeSubscription = { __typename?: 'Subscription' } & {
+  newBike: { __typename?: 'Bike' } & BikeFieldsFragment;
+};
+
+export type UpdatedBikeSubscriptionVariables = Exact<{
+  filter?: Maybe<BikeSubscriptionFilter>;
+}>;
+
+export type UpdatedBikeSubscription = { __typename?: 'Subscription' } & {
+  updatedBike: { __typename?: 'Bike' } & BikeFieldsFragment;
+};
+
+export type DeletedBikeSubscriptionVariables = Exact<{
+  filter?: Maybe<BikeSubscriptionFilter>;
+}>;
+
+export type DeletedBikeSubscription = { __typename?: 'Subscription' } & {
+  deletedBike: { __typename?: 'Bike' } & BikeFieldsFragment;
+};
+
+export type NewUserSubscriptionVariables = Exact<{
+  filter?: Maybe<UserSubscriptionFilter>;
+}>;
+
+export type NewUserSubscription = { __typename?: 'Subscription' } & {
+  newUser: { __typename?: 'User' } & UserFieldsFragment;
+};
+
+export type UpdatedUserSubscriptionVariables = Exact<{
+  filter?: Maybe<UserSubscriptionFilter>;
+}>;
+
+export type UpdatedUserSubscription = { __typename?: 'Subscription' } & {
+  updatedUser: { __typename?: 'User' } & UserFieldsFragment;
+};
+
+export type DeletedUserSubscriptionVariables = Exact<{
+  filter?: Maybe<UserSubscriptionFilter>;
+}>;
+
+export type DeletedUserSubscription = { __typename?: 'Subscription' } & {
+  deletedUser: { __typename?: 'User' } & UserFieldsFragment;
+};
+
+export const TheftFieldsFragmentDoc = gql`
+  fragment TheftFields on Theft {
     _id
-    text
-    description
+    date
+    location
+    comments
   }
-}
-    `;
-export const CommentFieldsFragmentDoc = gql`
-    fragment CommentFields on Comment {
-  _id
-  text
-  description
-}
-    `;
-export const CommentExpandedFieldsFragmentDoc = gql`
-    fragment CommentExpandedFields on Comment {
-  _id
-  text
-  description
-  note {
+`;
+export const TheftExpandedFieldsFragmentDoc = gql`
+  fragment TheftExpandedFields on Theft {
     _id
-    title
-    description
-  }
-}
-    `;
-export const GetDraftNotesDocument = gql`
-    query getDraftNotes {
-  getDraftNotes {
-    ...NoteExpandedFields
-  }
-}
-    ${NoteExpandedFieldsFragmentDoc}`;
-
-/**
- * __useGetDraftNotesQuery__
- *
- * To run a query within a React component, call `useGetDraftNotesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetDraftNotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetDraftNotesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetDraftNotesQuery(baseOptions?: Apollo.QueryHookOptions<GetDraftNotesQuery, GetDraftNotesQueryVariables>) {
-        return Apollo.useQuery<GetDraftNotesQuery, GetDraftNotesQueryVariables>(GetDraftNotesDocument, baseOptions);
-      }
-export function useGetDraftNotesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDraftNotesQuery, GetDraftNotesQueryVariables>) {
-          return Apollo.useLazyQuery<GetDraftNotesQuery, GetDraftNotesQueryVariables>(GetDraftNotesDocument, baseOptions);
-        }
-export type GetDraftNotesQueryHookResult = ReturnType<typeof useGetDraftNotesQuery>;
-export type GetDraftNotesLazyQueryHookResult = ReturnType<typeof useGetDraftNotesLazyQuery>;
-export type GetDraftNotesQueryResult = Apollo.QueryResult<GetDraftNotesQuery, GetDraftNotesQueryVariables>;
-export const FindNotesDocument = gql`
-    query findNotes($filter: NoteFilter, $page: PageRequest, $orderBy: OrderByInput) {
-  findNotes(filter: $filter, page: $page, orderBy: $orderBy) {
-    items {
-      ...NoteExpandedFields
+    date
+    location
+    bikes {
+      _id
+      description
     }
-    offset
-    limit
-    count
+    comments
+    owner {
+      _id
+      name
+      contact
+    }
   }
-}
-    ${NoteExpandedFieldsFragmentDoc}`;
+`;
+export const BikeFieldsFragmentDoc = gql`
+  fragment BikeFields on Bike {
+    _id
+    description
+  }
+`;
+export const BikeExpandedFieldsFragmentDoc = gql`
+  fragment BikeExpandedFields on Bike {
+    _id
+    description
+    owner {
+      _id
+      name
+      contact
+    }
+    theft {
+      _id
+      date
+      location
+      comments
+    }
+  }
+`;
+export const UserFieldsFragmentDoc = gql`
+  fragment UserFields on User {
+    _id
+    name
+    contact
+  }
+`;
+export const UserExpandedFieldsFragmentDoc = gql`
+  fragment UserExpandedFields on User {
+    _id
+    name
+    contact
+  }
+`;
+export const FindTheftsDocument = gql`
+  query findThefts(
+    $filter: TheftFilter
+    $page: PageRequest
+    $orderBy: OrderByInput
+  ) {
+    findThefts(filter: $filter, page: $page, orderBy: $orderBy) {
+      items {
+        ...TheftExpandedFields
+      }
+      offset
+      limit
+      count
+    }
+  }
+  ${TheftExpandedFieldsFragmentDoc}
+`;
 
 /**
- * __useFindNotesQuery__
+ * __useFindTheftsQuery__
  *
- * To run a query within a React component, call `useFindNotesQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindNotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFindTheftsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindTheftsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useFindNotesQuery({
+ * const { data, loading, error } = useFindTheftsQuery({
  *   variables: {
  *      filter: // value for 'filter'
  *      page: // value for 'page'
@@ -633,72 +695,117 @@ export const FindNotesDocument = gql`
  *   },
  * });
  */
-export function useFindNotesQuery(baseOptions?: Apollo.QueryHookOptions<FindNotesQuery, FindNotesQueryVariables>) {
-        return Apollo.useQuery<FindNotesQuery, FindNotesQueryVariables>(FindNotesDocument, baseOptions);
-      }
-export function useFindNotesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindNotesQuery, FindNotesQueryVariables>) {
-          return Apollo.useLazyQuery<FindNotesQuery, FindNotesQueryVariables>(FindNotesDocument, baseOptions);
-        }
-export type FindNotesQueryHookResult = ReturnType<typeof useFindNotesQuery>;
-export type FindNotesLazyQueryHookResult = ReturnType<typeof useFindNotesLazyQuery>;
-export type FindNotesQueryResult = Apollo.QueryResult<FindNotesQuery, FindNotesQueryVariables>;
-export const GetNoteDocument = gql`
-    query getNote($id: ID!) {
-  getNote(id: $id) {
-    ...NoteExpandedFields
-  }
+export function useFindTheftsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    FindTheftsQuery,
+    FindTheftsQueryVariables
+  >
+) {
+  return Apollo.useQuery<FindTheftsQuery, FindTheftsQueryVariables>(
+    FindTheftsDocument,
+    baseOptions
+  );
 }
-    ${NoteExpandedFieldsFragmentDoc}`;
+export function useFindTheftsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FindTheftsQuery,
+    FindTheftsQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<FindTheftsQuery, FindTheftsQueryVariables>(
+    FindTheftsDocument,
+    baseOptions
+  );
+}
+export type FindTheftsQueryHookResult = ReturnType<typeof useFindTheftsQuery>;
+export type FindTheftsLazyQueryHookResult = ReturnType<
+  typeof useFindTheftsLazyQuery
+>;
+export type FindTheftsQueryResult = Apollo.QueryResult<
+  FindTheftsQuery,
+  FindTheftsQueryVariables
+>;
+export const GetTheftDocument = gql`
+  query getTheft($id: GraphbackObjectID!) {
+    getTheft(id: $id) {
+      ...TheftExpandedFields
+    }
+  }
+  ${TheftExpandedFieldsFragmentDoc}
+`;
 
 /**
- * __useGetNoteQuery__
+ * __useGetTheftQuery__
  *
- * To run a query within a React component, call `useGetNoteQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetNoteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetTheftQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTheftQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetNoteQuery({
+ * const { data, loading, error } = useGetTheftQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetNoteQuery(baseOptions?: Apollo.QueryHookOptions<GetNoteQuery, GetNoteQueryVariables>) {
-        return Apollo.useQuery<GetNoteQuery, GetNoteQueryVariables>(GetNoteDocument, baseOptions);
-      }
-export function useGetNoteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNoteQuery, GetNoteQueryVariables>) {
-          return Apollo.useLazyQuery<GetNoteQuery, GetNoteQueryVariables>(GetNoteDocument, baseOptions);
-        }
-export type GetNoteQueryHookResult = ReturnType<typeof useGetNoteQuery>;
-export type GetNoteLazyQueryHookResult = ReturnType<typeof useGetNoteLazyQuery>;
-export type GetNoteQueryResult = Apollo.QueryResult<GetNoteQuery, GetNoteQueryVariables>;
-export const FindCommentsDocument = gql`
-    query findComments($filter: CommentFilter, $page: PageRequest, $orderBy: OrderByInput) {
-  findComments(filter: $filter, page: $page, orderBy: $orderBy) {
-    items {
-      ...CommentExpandedFields
-    }
-    offset
-    limit
-    count
-  }
+export function useGetTheftQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetTheftQuery, GetTheftQueryVariables>
+) {
+  return Apollo.useQuery<GetTheftQuery, GetTheftQueryVariables>(
+    GetTheftDocument,
+    baseOptions
+  );
 }
-    ${CommentExpandedFieldsFragmentDoc}`;
+export function useGetTheftLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetTheftQuery,
+    GetTheftQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<GetTheftQuery, GetTheftQueryVariables>(
+    GetTheftDocument,
+    baseOptions
+  );
+}
+export type GetTheftQueryHookResult = ReturnType<typeof useGetTheftQuery>;
+export type GetTheftLazyQueryHookResult = ReturnType<
+  typeof useGetTheftLazyQuery
+>;
+export type GetTheftQueryResult = Apollo.QueryResult<
+  GetTheftQuery,
+  GetTheftQueryVariables
+>;
+export const FindBikesDocument = gql`
+  query findBikes(
+    $filter: BikeFilter
+    $page: PageRequest
+    $orderBy: OrderByInput
+  ) {
+    findBikes(filter: $filter, page: $page, orderBy: $orderBy) {
+      items {
+        ...BikeExpandedFields
+      }
+      offset
+      limit
+      count
+    }
+  }
+  ${BikeExpandedFieldsFragmentDoc}
+`;
 
 /**
- * __useFindCommentsQuery__
+ * __useFindBikesQuery__
  *
- * To run a query within a React component, call `useFindCommentsQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindCommentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFindBikesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindBikesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useFindCommentsQuery({
+ * const { data, loading, error } = useFindBikesQuery({
  *   variables: {
  *      filter: // value for 'filter'
  *      page: // value for 'page'
@@ -706,411 +813,988 @@ export const FindCommentsDocument = gql`
  *   },
  * });
  */
-export function useFindCommentsQuery(baseOptions?: Apollo.QueryHookOptions<FindCommentsQuery, FindCommentsQueryVariables>) {
-        return Apollo.useQuery<FindCommentsQuery, FindCommentsQueryVariables>(FindCommentsDocument, baseOptions);
-      }
-export function useFindCommentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindCommentsQuery, FindCommentsQueryVariables>) {
-          return Apollo.useLazyQuery<FindCommentsQuery, FindCommentsQueryVariables>(FindCommentsDocument, baseOptions);
-        }
-export type FindCommentsQueryHookResult = ReturnType<typeof useFindCommentsQuery>;
-export type FindCommentsLazyQueryHookResult = ReturnType<typeof useFindCommentsLazyQuery>;
-export type FindCommentsQueryResult = Apollo.QueryResult<FindCommentsQuery, FindCommentsQueryVariables>;
-export const GetCommentDocument = gql`
-    query getComment($id: ID!) {
-  getComment(id: $id) {
-    ...CommentExpandedFields
-  }
+export function useFindBikesQuery(
+  baseOptions?: Apollo.QueryHookOptions<FindBikesQuery, FindBikesQueryVariables>
+) {
+  return Apollo.useQuery<FindBikesQuery, FindBikesQueryVariables>(
+    FindBikesDocument,
+    baseOptions
+  );
 }
-    ${CommentExpandedFieldsFragmentDoc}`;
+export function useFindBikesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FindBikesQuery,
+    FindBikesQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<FindBikesQuery, FindBikesQueryVariables>(
+    FindBikesDocument,
+    baseOptions
+  );
+}
+export type FindBikesQueryHookResult = ReturnType<typeof useFindBikesQuery>;
+export type FindBikesLazyQueryHookResult = ReturnType<
+  typeof useFindBikesLazyQuery
+>;
+export type FindBikesQueryResult = Apollo.QueryResult<
+  FindBikesQuery,
+  FindBikesQueryVariables
+>;
+export const GetBikeDocument = gql`
+  query getBike($id: GraphbackObjectID!) {
+    getBike(id: $id) {
+      ...BikeExpandedFields
+    }
+  }
+  ${BikeExpandedFieldsFragmentDoc}
+`;
 
 /**
- * __useGetCommentQuery__
+ * __useGetBikeQuery__
  *
- * To run a query within a React component, call `useGetCommentQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCommentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetBikeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBikeQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetCommentQuery({
+ * const { data, loading, error } = useGetBikeQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetCommentQuery(baseOptions?: Apollo.QueryHookOptions<GetCommentQuery, GetCommentQueryVariables>) {
-        return Apollo.useQuery<GetCommentQuery, GetCommentQueryVariables>(GetCommentDocument, baseOptions);
-      }
-export function useGetCommentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCommentQuery, GetCommentQueryVariables>) {
-          return Apollo.useLazyQuery<GetCommentQuery, GetCommentQueryVariables>(GetCommentDocument, baseOptions);
-        }
-export type GetCommentQueryHookResult = ReturnType<typeof useGetCommentQuery>;
-export type GetCommentLazyQueryHookResult = ReturnType<typeof useGetCommentLazyQuery>;
-export type GetCommentQueryResult = Apollo.QueryResult<GetCommentQuery, GetCommentQueryVariables>;
-export const CreateNoteDocument = gql`
-    mutation createNote($input: CreateNoteInput!) {
-  createNote(input: $input) {
-    ...NoteFields
-  }
+export function useGetBikeQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetBikeQuery, GetBikeQueryVariables>
+) {
+  return Apollo.useQuery<GetBikeQuery, GetBikeQueryVariables>(
+    GetBikeDocument,
+    baseOptions
+  );
 }
-    ${NoteFieldsFragmentDoc}`;
-export type CreateNoteMutationFn = Apollo.MutationFunction<CreateNoteMutation, CreateNoteMutationVariables>;
+export function useGetBikeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetBikeQuery, GetBikeQueryVariables>
+) {
+  return Apollo.useLazyQuery<GetBikeQuery, GetBikeQueryVariables>(
+    GetBikeDocument,
+    baseOptions
+  );
+}
+export type GetBikeQueryHookResult = ReturnType<typeof useGetBikeQuery>;
+export type GetBikeLazyQueryHookResult = ReturnType<typeof useGetBikeLazyQuery>;
+export type GetBikeQueryResult = Apollo.QueryResult<
+  GetBikeQuery,
+  GetBikeQueryVariables
+>;
+export const FindUsersDocument = gql`
+  query findUsers(
+    $filter: UserFilter
+    $page: PageRequest
+    $orderBy: OrderByInput
+  ) {
+    findUsers(filter: $filter, page: $page, orderBy: $orderBy) {
+      items {
+        ...UserExpandedFields
+      }
+      offset
+      limit
+      count
+    }
+  }
+  ${UserExpandedFieldsFragmentDoc}
+`;
 
 /**
- * __useCreateNoteMutation__
+ * __useFindUsersQuery__
  *
- * To run a mutation, you first call `useCreateNoteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateNoteMutation` returns a tuple that includes:
+ * To run a query within a React component, call `useFindUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindUsersQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *      page: // value for 'page'
+ *      orderBy: // value for 'orderBy'
+ *   },
+ * });
+ */
+export function useFindUsersQuery(
+  baseOptions?: Apollo.QueryHookOptions<FindUsersQuery, FindUsersQueryVariables>
+) {
+  return Apollo.useQuery<FindUsersQuery, FindUsersQueryVariables>(
+    FindUsersDocument,
+    baseOptions
+  );
+}
+export function useFindUsersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FindUsersQuery,
+    FindUsersQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<FindUsersQuery, FindUsersQueryVariables>(
+    FindUsersDocument,
+    baseOptions
+  );
+}
+export type FindUsersQueryHookResult = ReturnType<typeof useFindUsersQuery>;
+export type FindUsersLazyQueryHookResult = ReturnType<
+  typeof useFindUsersLazyQuery
+>;
+export type FindUsersQueryResult = Apollo.QueryResult<
+  FindUsersQuery,
+  FindUsersQueryVariables
+>;
+export const GetUserDocument = gql`
+  query getUser($id: GraphbackObjectID!) {
+    getUser(id: $id) {
+      ...UserExpandedFields
+    }
+  }
+  ${UserExpandedFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetUserQuery__
+ *
+ * To run a query within a React component, call `useGetUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetUserQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>
+) {
+  return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(
+    GetUserDocument,
+    baseOptions
+  );
+}
+export function useGetUserLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>
+) {
+  return Apollo.useLazyQuery<GetUserQuery, GetUserQueryVariables>(
+    GetUserDocument,
+    baseOptions
+  );
+}
+export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
+export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
+export type GetUserQueryResult = Apollo.QueryResult<
+  GetUserQuery,
+  GetUserQueryVariables
+>;
+export const CreateTheftDocument = gql`
+  mutation createTheft($input: CreateTheftInput!) {
+    createTheft(input: $input) {
+      ...TheftFields
+    }
+  }
+  ${TheftFieldsFragmentDoc}
+`;
+export type CreateTheftMutationFn = Apollo.MutationFunction<
+  CreateTheftMutation,
+  CreateTheftMutationVariables
+>;
+
+/**
+ * __useCreateTheftMutation__
+ *
+ * To run a mutation, you first call `useCreateTheftMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTheftMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createNoteMutation, { data, loading, error }] = useCreateNoteMutation({
+ * const [createTheftMutation, { data, loading, error }] = useCreateTheftMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useCreateNoteMutation(baseOptions?: Apollo.MutationHookOptions<CreateNoteMutation, CreateNoteMutationVariables>) {
-        return Apollo.useMutation<CreateNoteMutation, CreateNoteMutationVariables>(CreateNoteDocument, baseOptions);
-      }
-export type CreateNoteMutationHookResult = ReturnType<typeof useCreateNoteMutation>;
-export type CreateNoteMutationResult = Apollo.MutationResult<CreateNoteMutation>;
-export type CreateNoteMutationOptions = Apollo.BaseMutationOptions<CreateNoteMutation, CreateNoteMutationVariables>;
-export const UpdateNoteDocument = gql`
-    mutation updateNote($input: MutateNoteInput!) {
-  updateNote(input: $input) {
-    ...NoteFields
-  }
+export function useCreateTheftMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateTheftMutation,
+    CreateTheftMutationVariables
+  >
+) {
+  return Apollo.useMutation<CreateTheftMutation, CreateTheftMutationVariables>(
+    CreateTheftDocument,
+    baseOptions
+  );
 }
-    ${NoteFieldsFragmentDoc}`;
-export type UpdateNoteMutationFn = Apollo.MutationFunction<UpdateNoteMutation, UpdateNoteMutationVariables>;
+export type CreateTheftMutationHookResult = ReturnType<
+  typeof useCreateTheftMutation
+>;
+export type CreateTheftMutationResult = Apollo.MutationResult<CreateTheftMutation>;
+export type CreateTheftMutationOptions = Apollo.BaseMutationOptions<
+  CreateTheftMutation,
+  CreateTheftMutationVariables
+>;
+export const UpdateTheftDocument = gql`
+  mutation updateTheft($input: MutateTheftInput!) {
+    updateTheft(input: $input) {
+      ...TheftFields
+    }
+  }
+  ${TheftFieldsFragmentDoc}
+`;
+export type UpdateTheftMutationFn = Apollo.MutationFunction<
+  UpdateTheftMutation,
+  UpdateTheftMutationVariables
+>;
 
 /**
- * __useUpdateNoteMutation__
+ * __useUpdateTheftMutation__
  *
- * To run a mutation, you first call `useUpdateNoteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateNoteMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateTheftMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTheftMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateNoteMutation, { data, loading, error }] = useUpdateNoteMutation({
+ * const [updateTheftMutation, { data, loading, error }] = useUpdateTheftMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useUpdateNoteMutation(baseOptions?: Apollo.MutationHookOptions<UpdateNoteMutation, UpdateNoteMutationVariables>) {
-        return Apollo.useMutation<UpdateNoteMutation, UpdateNoteMutationVariables>(UpdateNoteDocument, baseOptions);
-      }
-export type UpdateNoteMutationHookResult = ReturnType<typeof useUpdateNoteMutation>;
-export type UpdateNoteMutationResult = Apollo.MutationResult<UpdateNoteMutation>;
-export type UpdateNoteMutationOptions = Apollo.BaseMutationOptions<UpdateNoteMutation, UpdateNoteMutationVariables>;
-export const DeleteNoteDocument = gql`
-    mutation deleteNote($input: MutateNoteInput!) {
-  deleteNote(input: $input) {
-    ...NoteFields
-  }
+export function useUpdateTheftMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateTheftMutation,
+    UpdateTheftMutationVariables
+  >
+) {
+  return Apollo.useMutation<UpdateTheftMutation, UpdateTheftMutationVariables>(
+    UpdateTheftDocument,
+    baseOptions
+  );
 }
-    ${NoteFieldsFragmentDoc}`;
-export type DeleteNoteMutationFn = Apollo.MutationFunction<DeleteNoteMutation, DeleteNoteMutationVariables>;
+export type UpdateTheftMutationHookResult = ReturnType<
+  typeof useUpdateTheftMutation
+>;
+export type UpdateTheftMutationResult = Apollo.MutationResult<UpdateTheftMutation>;
+export type UpdateTheftMutationOptions = Apollo.BaseMutationOptions<
+  UpdateTheftMutation,
+  UpdateTheftMutationVariables
+>;
+export const DeleteTheftDocument = gql`
+  mutation deleteTheft($input: MutateTheftInput!) {
+    deleteTheft(input: $input) {
+      ...TheftFields
+    }
+  }
+  ${TheftFieldsFragmentDoc}
+`;
+export type DeleteTheftMutationFn = Apollo.MutationFunction<
+  DeleteTheftMutation,
+  DeleteTheftMutationVariables
+>;
 
 /**
- * __useDeleteNoteMutation__
+ * __useDeleteTheftMutation__
  *
- * To run a mutation, you first call `useDeleteNoteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteNoteMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useDeleteTheftMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteTheftMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteNoteMutation, { data, loading, error }] = useDeleteNoteMutation({
+ * const [deleteTheftMutation, { data, loading, error }] = useDeleteTheftMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useDeleteNoteMutation(baseOptions?: Apollo.MutationHookOptions<DeleteNoteMutation, DeleteNoteMutationVariables>) {
-        return Apollo.useMutation<DeleteNoteMutation, DeleteNoteMutationVariables>(DeleteNoteDocument, baseOptions);
-      }
-export type DeleteNoteMutationHookResult = ReturnType<typeof useDeleteNoteMutation>;
-export type DeleteNoteMutationResult = Apollo.MutationResult<DeleteNoteMutation>;
-export type DeleteNoteMutationOptions = Apollo.BaseMutationOptions<DeleteNoteMutation, DeleteNoteMutationVariables>;
-export const CreateCommentDocument = gql`
-    mutation createComment($input: CreateCommentInput!) {
-  createComment(input: $input) {
-    ...CommentFields
-  }
+export function useDeleteTheftMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteTheftMutation,
+    DeleteTheftMutationVariables
+  >
+) {
+  return Apollo.useMutation<DeleteTheftMutation, DeleteTheftMutationVariables>(
+    DeleteTheftDocument,
+    baseOptions
+  );
 }
-    ${CommentFieldsFragmentDoc}`;
-export type CreateCommentMutationFn = Apollo.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
+export type DeleteTheftMutationHookResult = ReturnType<
+  typeof useDeleteTheftMutation
+>;
+export type DeleteTheftMutationResult = Apollo.MutationResult<DeleteTheftMutation>;
+export type DeleteTheftMutationOptions = Apollo.BaseMutationOptions<
+  DeleteTheftMutation,
+  DeleteTheftMutationVariables
+>;
+export const CreateBikeDocument = gql`
+  mutation createBike($input: CreateBikeInput!) {
+    createBike(input: $input) {
+      ...BikeFields
+    }
+  }
+  ${BikeFieldsFragmentDoc}
+`;
+export type CreateBikeMutationFn = Apollo.MutationFunction<
+  CreateBikeMutation,
+  CreateBikeMutationVariables
+>;
 
 /**
- * __useCreateCommentMutation__
+ * __useCreateBikeMutation__
  *
- * To run a mutation, you first call `useCreateCommentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateCommentMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateBikeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBikeMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createCommentMutation, { data, loading, error }] = useCreateCommentMutation({
+ * const [createBikeMutation, { data, loading, error }] = useCreateBikeMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useCreateCommentMutation(baseOptions?: Apollo.MutationHookOptions<CreateCommentMutation, CreateCommentMutationVariables>) {
-        return Apollo.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument, baseOptions);
-      }
-export type CreateCommentMutationHookResult = ReturnType<typeof useCreateCommentMutation>;
-export type CreateCommentMutationResult = Apollo.MutationResult<CreateCommentMutation>;
-export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<CreateCommentMutation, CreateCommentMutationVariables>;
-export const UpdateCommentDocument = gql`
-    mutation updateComment($input: MutateCommentInput!) {
-  updateComment(input: $input) {
-    ...CommentFields
-  }
+export function useCreateBikeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateBikeMutation,
+    CreateBikeMutationVariables
+  >
+) {
+  return Apollo.useMutation<CreateBikeMutation, CreateBikeMutationVariables>(
+    CreateBikeDocument,
+    baseOptions
+  );
 }
-    ${CommentFieldsFragmentDoc}`;
-export type UpdateCommentMutationFn = Apollo.MutationFunction<UpdateCommentMutation, UpdateCommentMutationVariables>;
+export type CreateBikeMutationHookResult = ReturnType<
+  typeof useCreateBikeMutation
+>;
+export type CreateBikeMutationResult = Apollo.MutationResult<CreateBikeMutation>;
+export type CreateBikeMutationOptions = Apollo.BaseMutationOptions<
+  CreateBikeMutation,
+  CreateBikeMutationVariables
+>;
+export const UpdateBikeDocument = gql`
+  mutation updateBike($input: MutateBikeInput!) {
+    updateBike(input: $input) {
+      ...BikeFields
+    }
+  }
+  ${BikeFieldsFragmentDoc}
+`;
+export type UpdateBikeMutationFn = Apollo.MutationFunction<
+  UpdateBikeMutation,
+  UpdateBikeMutationVariables
+>;
 
 /**
- * __useUpdateCommentMutation__
+ * __useUpdateBikeMutation__
  *
- * To run a mutation, you first call `useUpdateCommentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateCommentMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateBikeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBikeMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateCommentMutation, { data, loading, error }] = useUpdateCommentMutation({
+ * const [updateBikeMutation, { data, loading, error }] = useUpdateBikeMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useUpdateCommentMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCommentMutation, UpdateCommentMutationVariables>) {
-        return Apollo.useMutation<UpdateCommentMutation, UpdateCommentMutationVariables>(UpdateCommentDocument, baseOptions);
-      }
-export type UpdateCommentMutationHookResult = ReturnType<typeof useUpdateCommentMutation>;
-export type UpdateCommentMutationResult = Apollo.MutationResult<UpdateCommentMutation>;
-export type UpdateCommentMutationOptions = Apollo.BaseMutationOptions<UpdateCommentMutation, UpdateCommentMutationVariables>;
-export const DeleteCommentDocument = gql`
-    mutation deleteComment($input: MutateCommentInput!) {
-  deleteComment(input: $input) {
-    ...CommentFields
-  }
+export function useUpdateBikeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateBikeMutation,
+    UpdateBikeMutationVariables
+  >
+) {
+  return Apollo.useMutation<UpdateBikeMutation, UpdateBikeMutationVariables>(
+    UpdateBikeDocument,
+    baseOptions
+  );
 }
-    ${CommentFieldsFragmentDoc}`;
-export type DeleteCommentMutationFn = Apollo.MutationFunction<DeleteCommentMutation, DeleteCommentMutationVariables>;
+export type UpdateBikeMutationHookResult = ReturnType<
+  typeof useUpdateBikeMutation
+>;
+export type UpdateBikeMutationResult = Apollo.MutationResult<UpdateBikeMutation>;
+export type UpdateBikeMutationOptions = Apollo.BaseMutationOptions<
+  UpdateBikeMutation,
+  UpdateBikeMutationVariables
+>;
+export const DeleteBikeDocument = gql`
+  mutation deleteBike($input: MutateBikeInput!) {
+    deleteBike(input: $input) {
+      ...BikeFields
+    }
+  }
+  ${BikeFieldsFragmentDoc}
+`;
+export type DeleteBikeMutationFn = Apollo.MutationFunction<
+  DeleteBikeMutation,
+  DeleteBikeMutationVariables
+>;
 
 /**
- * __useDeleteCommentMutation__
+ * __useDeleteBikeMutation__
  *
- * To run a mutation, you first call `useDeleteCommentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteCommentMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useDeleteBikeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteBikeMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteCommentMutation, { data, loading, error }] = useDeleteCommentMutation({
+ * const [deleteBikeMutation, { data, loading, error }] = useDeleteBikeMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useDeleteCommentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCommentMutation, DeleteCommentMutationVariables>) {
-        return Apollo.useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DeleteCommentDocument, baseOptions);
-      }
-export type DeleteCommentMutationHookResult = ReturnType<typeof useDeleteCommentMutation>;
-export type DeleteCommentMutationResult = Apollo.MutationResult<DeleteCommentMutation>;
-export type DeleteCommentMutationOptions = Apollo.BaseMutationOptions<DeleteCommentMutation, DeleteCommentMutationVariables>;
-export const NewNoteDocument = gql`
-    subscription newNote($filter: NoteSubscriptionFilter) {
-  newNote(filter: $filter) {
-    ...NoteFields
-  }
+export function useDeleteBikeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteBikeMutation,
+    DeleteBikeMutationVariables
+  >
+) {
+  return Apollo.useMutation<DeleteBikeMutation, DeleteBikeMutationVariables>(
+    DeleteBikeDocument,
+    baseOptions
+  );
 }
-    ${NoteFieldsFragmentDoc}`;
+export type DeleteBikeMutationHookResult = ReturnType<
+  typeof useDeleteBikeMutation
+>;
+export type DeleteBikeMutationResult = Apollo.MutationResult<DeleteBikeMutation>;
+export type DeleteBikeMutationOptions = Apollo.BaseMutationOptions<
+  DeleteBikeMutation,
+  DeleteBikeMutationVariables
+>;
+export const CreateUserDocument = gql`
+  mutation createUser($input: CreateUserInput!) {
+    createUser(input: $input) {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
+export type CreateUserMutationFn = Apollo.MutationFunction<
+  CreateUserMutation,
+  CreateUserMutationVariables
+>;
 
 /**
- * __useNewNoteSubscription__
+ * __useCreateUserMutation__
  *
- * To run a query within a React component, call `useNewNoteSubscription` and pass it any options that fit your needs.
- * When your component renders, `useNewNoteSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a mutation, you first call `useCreateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUserMutation, { data, loading, error }] = useCreateUserMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateUserMutation,
+    CreateUserMutationVariables
+  >
+) {
+  return Apollo.useMutation<CreateUserMutation, CreateUserMutationVariables>(
+    CreateUserDocument,
+    baseOptions
+  );
+}
+export type CreateUserMutationHookResult = ReturnType<
+  typeof useCreateUserMutation
+>;
+export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
+export type CreateUserMutationOptions = Apollo.BaseMutationOptions<
+  CreateUserMutation,
+  CreateUserMutationVariables
+>;
+export const UpdateUserDocument = gql`
+  mutation updateUser($input: MutateUserInput!) {
+    updateUser(input: $input) {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
+export type UpdateUserMutationFn = Apollo.MutationFunction<
+  UpdateUserMutation,
+  UpdateUserMutationVariables
+>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateUserMutation,
+    UpdateUserMutationVariables
+  >
+) {
+  return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(
+    UpdateUserDocument,
+    baseOptions
+  );
+}
+export type UpdateUserMutationHookResult = ReturnType<
+  typeof useUpdateUserMutation
+>;
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<
+  UpdateUserMutation,
+  UpdateUserMutationVariables
+>;
+export const DeleteUserDocument = gql`
+  mutation deleteUser($input: MutateUserInput!) {
+    deleteUser(input: $input) {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
+export type DeleteUserMutationFn = Apollo.MutationFunction<
+  DeleteUserMutation,
+  DeleteUserMutationVariables
+>;
+
+/**
+ * __useDeleteUserMutation__
+ *
+ * To run a mutation, you first call `useDeleteUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteUserMutation, { data, loading, error }] = useDeleteUserMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteUserMutation,
+    DeleteUserMutationVariables
+  >
+) {
+  return Apollo.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(
+    DeleteUserDocument,
+    baseOptions
+  );
+}
+export type DeleteUserMutationHookResult = ReturnType<
+  typeof useDeleteUserMutation
+>;
+export type DeleteUserMutationResult = Apollo.MutationResult<DeleteUserMutation>;
+export type DeleteUserMutationOptions = Apollo.BaseMutationOptions<
+  DeleteUserMutation,
+  DeleteUserMutationVariables
+>;
+export const NewTheftDocument = gql`
+  subscription newTheft($filter: TheftSubscriptionFilter) {
+    newTheft(filter: $filter) {
+      ...TheftFields
+    }
+  }
+  ${TheftFieldsFragmentDoc}
+`;
+
+/**
+ * __useNewTheftSubscription__
+ *
+ * To run a query within a React component, call `useNewTheftSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewTheftSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useNewNoteSubscription({
+ * const { data, loading, error } = useNewTheftSubscription({
  *   variables: {
  *      filter: // value for 'filter'
  *   },
  * });
  */
-export function useNewNoteSubscription(baseOptions?: Apollo.SubscriptionHookOptions<NewNoteSubscription, NewNoteSubscriptionVariables>) {
-        return Apollo.useSubscription<NewNoteSubscription, NewNoteSubscriptionVariables>(NewNoteDocument, baseOptions);
-      }
-export type NewNoteSubscriptionHookResult = ReturnType<typeof useNewNoteSubscription>;
-export type NewNoteSubscriptionResult = Apollo.SubscriptionResult<NewNoteSubscription>;
-export const UpdatedNoteDocument = gql`
-    subscription updatedNote($filter: NoteSubscriptionFilter) {
-  updatedNote(filter: $filter) {
-    ...NoteFields
-  }
+export function useNewTheftSubscription(
+  baseOptions?: Apollo.SubscriptionHookOptions<
+    NewTheftSubscription,
+    NewTheftSubscriptionVariables
+  >
+) {
+  return Apollo.useSubscription<
+    NewTheftSubscription,
+    NewTheftSubscriptionVariables
+  >(NewTheftDocument, baseOptions);
 }
-    ${NoteFieldsFragmentDoc}`;
+export type NewTheftSubscriptionHookResult = ReturnType<
+  typeof useNewTheftSubscription
+>;
+export type NewTheftSubscriptionResult = Apollo.SubscriptionResult<NewTheftSubscription>;
+export const UpdatedTheftDocument = gql`
+  subscription updatedTheft($filter: TheftSubscriptionFilter) {
+    updatedTheft(filter: $filter) {
+      ...TheftFields
+    }
+  }
+  ${TheftFieldsFragmentDoc}
+`;
 
 /**
- * __useUpdatedNoteSubscription__
+ * __useUpdatedTheftSubscription__
  *
- * To run a query within a React component, call `useUpdatedNoteSubscription` and pass it any options that fit your needs.
- * When your component renders, `useUpdatedNoteSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useUpdatedTheftSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useUpdatedTheftSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUpdatedNoteSubscription({
+ * const { data, loading, error } = useUpdatedTheftSubscription({
  *   variables: {
  *      filter: // value for 'filter'
  *   },
  * });
  */
-export function useUpdatedNoteSubscription(baseOptions?: Apollo.SubscriptionHookOptions<UpdatedNoteSubscription, UpdatedNoteSubscriptionVariables>) {
-        return Apollo.useSubscription<UpdatedNoteSubscription, UpdatedNoteSubscriptionVariables>(UpdatedNoteDocument, baseOptions);
-      }
-export type UpdatedNoteSubscriptionHookResult = ReturnType<typeof useUpdatedNoteSubscription>;
-export type UpdatedNoteSubscriptionResult = Apollo.SubscriptionResult<UpdatedNoteSubscription>;
-export const DeletedNoteDocument = gql`
-    subscription deletedNote($filter: NoteSubscriptionFilter) {
-  deletedNote(filter: $filter) {
-    ...NoteFields
-  }
+export function useUpdatedTheftSubscription(
+  baseOptions?: Apollo.SubscriptionHookOptions<
+    UpdatedTheftSubscription,
+    UpdatedTheftSubscriptionVariables
+  >
+) {
+  return Apollo.useSubscription<
+    UpdatedTheftSubscription,
+    UpdatedTheftSubscriptionVariables
+  >(UpdatedTheftDocument, baseOptions);
 }
-    ${NoteFieldsFragmentDoc}`;
+export type UpdatedTheftSubscriptionHookResult = ReturnType<
+  typeof useUpdatedTheftSubscription
+>;
+export type UpdatedTheftSubscriptionResult = Apollo.SubscriptionResult<UpdatedTheftSubscription>;
+export const DeletedTheftDocument = gql`
+  subscription deletedTheft($filter: TheftSubscriptionFilter) {
+    deletedTheft(filter: $filter) {
+      ...TheftFields
+    }
+  }
+  ${TheftFieldsFragmentDoc}
+`;
 
 /**
- * __useDeletedNoteSubscription__
+ * __useDeletedTheftSubscription__
  *
- * To run a query within a React component, call `useDeletedNoteSubscription` and pass it any options that fit your needs.
- * When your component renders, `useDeletedNoteSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useDeletedTheftSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useDeletedTheftSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useDeletedNoteSubscription({
+ * const { data, loading, error } = useDeletedTheftSubscription({
  *   variables: {
  *      filter: // value for 'filter'
  *   },
  * });
  */
-export function useDeletedNoteSubscription(baseOptions?: Apollo.SubscriptionHookOptions<DeletedNoteSubscription, DeletedNoteSubscriptionVariables>) {
-        return Apollo.useSubscription<DeletedNoteSubscription, DeletedNoteSubscriptionVariables>(DeletedNoteDocument, baseOptions);
-      }
-export type DeletedNoteSubscriptionHookResult = ReturnType<typeof useDeletedNoteSubscription>;
-export type DeletedNoteSubscriptionResult = Apollo.SubscriptionResult<DeletedNoteSubscription>;
-export const NewCommentDocument = gql`
-    subscription newComment($filter: CommentSubscriptionFilter) {
-  newComment(filter: $filter) {
-    ...CommentFields
-  }
+export function useDeletedTheftSubscription(
+  baseOptions?: Apollo.SubscriptionHookOptions<
+    DeletedTheftSubscription,
+    DeletedTheftSubscriptionVariables
+  >
+) {
+  return Apollo.useSubscription<
+    DeletedTheftSubscription,
+    DeletedTheftSubscriptionVariables
+  >(DeletedTheftDocument, baseOptions);
 }
-    ${CommentFieldsFragmentDoc}`;
+export type DeletedTheftSubscriptionHookResult = ReturnType<
+  typeof useDeletedTheftSubscription
+>;
+export type DeletedTheftSubscriptionResult = Apollo.SubscriptionResult<DeletedTheftSubscription>;
+export const NewBikeDocument = gql`
+  subscription newBike($filter: BikeSubscriptionFilter) {
+    newBike(filter: $filter) {
+      ...BikeFields
+    }
+  }
+  ${BikeFieldsFragmentDoc}
+`;
 
 /**
- * __useNewCommentSubscription__
+ * __useNewBikeSubscription__
  *
- * To run a query within a React component, call `useNewCommentSubscription` and pass it any options that fit your needs.
- * When your component renders, `useNewCommentSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useNewBikeSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewBikeSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useNewCommentSubscription({
+ * const { data, loading, error } = useNewBikeSubscription({
  *   variables: {
  *      filter: // value for 'filter'
  *   },
  * });
  */
-export function useNewCommentSubscription(baseOptions?: Apollo.SubscriptionHookOptions<NewCommentSubscription, NewCommentSubscriptionVariables>) {
-        return Apollo.useSubscription<NewCommentSubscription, NewCommentSubscriptionVariables>(NewCommentDocument, baseOptions);
-      }
-export type NewCommentSubscriptionHookResult = ReturnType<typeof useNewCommentSubscription>;
-export type NewCommentSubscriptionResult = Apollo.SubscriptionResult<NewCommentSubscription>;
-export const UpdatedCommentDocument = gql`
-    subscription updatedComment($filter: CommentSubscriptionFilter) {
-  updatedComment(filter: $filter) {
-    ...CommentFields
-  }
+export function useNewBikeSubscription(
+  baseOptions?: Apollo.SubscriptionHookOptions<
+    NewBikeSubscription,
+    NewBikeSubscriptionVariables
+  >
+) {
+  return Apollo.useSubscription<
+    NewBikeSubscription,
+    NewBikeSubscriptionVariables
+  >(NewBikeDocument, baseOptions);
 }
-    ${CommentFieldsFragmentDoc}`;
+export type NewBikeSubscriptionHookResult = ReturnType<
+  typeof useNewBikeSubscription
+>;
+export type NewBikeSubscriptionResult = Apollo.SubscriptionResult<NewBikeSubscription>;
+export const UpdatedBikeDocument = gql`
+  subscription updatedBike($filter: BikeSubscriptionFilter) {
+    updatedBike(filter: $filter) {
+      ...BikeFields
+    }
+  }
+  ${BikeFieldsFragmentDoc}
+`;
 
 /**
- * __useUpdatedCommentSubscription__
+ * __useUpdatedBikeSubscription__
  *
- * To run a query within a React component, call `useUpdatedCommentSubscription` and pass it any options that fit your needs.
- * When your component renders, `useUpdatedCommentSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useUpdatedBikeSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useUpdatedBikeSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUpdatedCommentSubscription({
+ * const { data, loading, error } = useUpdatedBikeSubscription({
  *   variables: {
  *      filter: // value for 'filter'
  *   },
  * });
  */
-export function useUpdatedCommentSubscription(baseOptions?: Apollo.SubscriptionHookOptions<UpdatedCommentSubscription, UpdatedCommentSubscriptionVariables>) {
-        return Apollo.useSubscription<UpdatedCommentSubscription, UpdatedCommentSubscriptionVariables>(UpdatedCommentDocument, baseOptions);
-      }
-export type UpdatedCommentSubscriptionHookResult = ReturnType<typeof useUpdatedCommentSubscription>;
-export type UpdatedCommentSubscriptionResult = Apollo.SubscriptionResult<UpdatedCommentSubscription>;
-export const DeletedCommentDocument = gql`
-    subscription deletedComment($filter: CommentSubscriptionFilter) {
-  deletedComment(filter: $filter) {
-    ...CommentFields
-  }
+export function useUpdatedBikeSubscription(
+  baseOptions?: Apollo.SubscriptionHookOptions<
+    UpdatedBikeSubscription,
+    UpdatedBikeSubscriptionVariables
+  >
+) {
+  return Apollo.useSubscription<
+    UpdatedBikeSubscription,
+    UpdatedBikeSubscriptionVariables
+  >(UpdatedBikeDocument, baseOptions);
 }
-    ${CommentFieldsFragmentDoc}`;
+export type UpdatedBikeSubscriptionHookResult = ReturnType<
+  typeof useUpdatedBikeSubscription
+>;
+export type UpdatedBikeSubscriptionResult = Apollo.SubscriptionResult<UpdatedBikeSubscription>;
+export const DeletedBikeDocument = gql`
+  subscription deletedBike($filter: BikeSubscriptionFilter) {
+    deletedBike(filter: $filter) {
+      ...BikeFields
+    }
+  }
+  ${BikeFieldsFragmentDoc}
+`;
 
 /**
- * __useDeletedCommentSubscription__
+ * __useDeletedBikeSubscription__
  *
- * To run a query within a React component, call `useDeletedCommentSubscription` and pass it any options that fit your needs.
- * When your component renders, `useDeletedCommentSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useDeletedBikeSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useDeletedBikeSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useDeletedCommentSubscription({
+ * const { data, loading, error } = useDeletedBikeSubscription({
  *   variables: {
  *      filter: // value for 'filter'
  *   },
  * });
  */
-export function useDeletedCommentSubscription(baseOptions?: Apollo.SubscriptionHookOptions<DeletedCommentSubscription, DeletedCommentSubscriptionVariables>) {
-        return Apollo.useSubscription<DeletedCommentSubscription, DeletedCommentSubscriptionVariables>(DeletedCommentDocument, baseOptions);
-      }
-export type DeletedCommentSubscriptionHookResult = ReturnType<typeof useDeletedCommentSubscription>;
-export type DeletedCommentSubscriptionResult = Apollo.SubscriptionResult<DeletedCommentSubscription>;
+export function useDeletedBikeSubscription(
+  baseOptions?: Apollo.SubscriptionHookOptions<
+    DeletedBikeSubscription,
+    DeletedBikeSubscriptionVariables
+  >
+) {
+  return Apollo.useSubscription<
+    DeletedBikeSubscription,
+    DeletedBikeSubscriptionVariables
+  >(DeletedBikeDocument, baseOptions);
+}
+export type DeletedBikeSubscriptionHookResult = ReturnType<
+  typeof useDeletedBikeSubscription
+>;
+export type DeletedBikeSubscriptionResult = Apollo.SubscriptionResult<DeletedBikeSubscription>;
+export const NewUserDocument = gql`
+  subscription newUser($filter: UserSubscriptionFilter) {
+    newUser(filter: $filter) {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
+
+/**
+ * __useNewUserSubscription__
+ *
+ * To run a query within a React component, call `useNewUserSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewUserSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewUserSubscription({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useNewUserSubscription(
+  baseOptions?: Apollo.SubscriptionHookOptions<
+    NewUserSubscription,
+    NewUserSubscriptionVariables
+  >
+) {
+  return Apollo.useSubscription<
+    NewUserSubscription,
+    NewUserSubscriptionVariables
+  >(NewUserDocument, baseOptions);
+}
+export type NewUserSubscriptionHookResult = ReturnType<
+  typeof useNewUserSubscription
+>;
+export type NewUserSubscriptionResult = Apollo.SubscriptionResult<NewUserSubscription>;
+export const UpdatedUserDocument = gql`
+  subscription updatedUser($filter: UserSubscriptionFilter) {
+    updatedUser(filter: $filter) {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
+
+/**
+ * __useUpdatedUserSubscription__
+ *
+ * To run a query within a React component, call `useUpdatedUserSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useUpdatedUserSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUpdatedUserSubscription({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useUpdatedUserSubscription(
+  baseOptions?: Apollo.SubscriptionHookOptions<
+    UpdatedUserSubscription,
+    UpdatedUserSubscriptionVariables
+  >
+) {
+  return Apollo.useSubscription<
+    UpdatedUserSubscription,
+    UpdatedUserSubscriptionVariables
+  >(UpdatedUserDocument, baseOptions);
+}
+export type UpdatedUserSubscriptionHookResult = ReturnType<
+  typeof useUpdatedUserSubscription
+>;
+export type UpdatedUserSubscriptionResult = Apollo.SubscriptionResult<UpdatedUserSubscription>;
+export const DeletedUserDocument = gql`
+  subscription deletedUser($filter: UserSubscriptionFilter) {
+    deletedUser(filter: $filter) {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
+
+/**
+ * __useDeletedUserSubscription__
+ *
+ * To run a query within a React component, call `useDeletedUserSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useDeletedUserSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDeletedUserSubscription({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useDeletedUserSubscription(
+  baseOptions?: Apollo.SubscriptionHookOptions<
+    DeletedUserSubscription,
+    DeletedUserSubscriptionVariables
+  >
+) {
+  return Apollo.useSubscription<
+    DeletedUserSubscription,
+    DeletedUserSubscriptionVariables
+  >(DeletedUserDocument, baseOptions);
+}
+export type DeletedUserSubscriptionHookResult = ReturnType<
+  typeof useDeletedUserSubscription
+>;
+export type DeletedUserSubscriptionResult = Apollo.SubscriptionResult<DeletedUserSubscription>;

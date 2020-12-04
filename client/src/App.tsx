@@ -1,36 +1,22 @@
 import React, { useState } from 'react';
-import { useFindNotesQuery, useGetDraftNotesQuery } from './generated-types';
-import CreateNote from './components/notes/CreateNote';
-import OneNote from './components/notes/OneNote';
-import { Checkbox, Box, Container, List, ListItem } from '@material-ui/core';
+import { useFindTheftsQuery, useGetTheftQuery } from './generated-types';
+import { Checkbox, Box, Container } from '@material-ui/core';
 
 const App: React.FC = () => {
-  const allNotes = useFindNotesQuery();
-  allNotes.startPolling(2000);
-  console.log(allNotes.data?.findNotes)
+  const allThefts = useFindTheftsQuery();
+  allThefts.startPolling(2000);
+  console.log(allThefts.data?.findThefts);
 
-  const [viewDraftNotes, setViewDraftNotes] = useState(false);
-
-  const draftNotes = useGetDraftNotesQuery();
-
-  const noteItems = viewDraftNotes ? draftNotes?.data?.getDraftNotes : allNotes.data?.findNotes?.items;
+  const draftThefts = useGetTheftQuery();
+  console.log(draftThefts.data);
 
   return (
-    <Container>
-      <CreateNote />
-      <Box>
-        <div style={{marginLeft: 400, paddingTop: 50 }}><Checkbox checked={viewDraftNotes} onChange={() => setViewDraftNotes(!viewDraftNotes)} /> <b>VIEW DRAFT NOTES</b></div>
-        <ul>
-          {
-            // TODO fix typings
-            noteItems && noteItems.map((note: any) => (
-              <OneNote key={note._id} _id={note._id} title={note.title} description={note.description} comments={note.comments} />
-            ))
-          }
-        </ul>
-      </Box>
-    </Container>
+    <Box>
+      <div style={{ marginLeft: 400, paddingTop: 50 }}>
+        <b>VIEW DRAFT NOTES</b>
+      </div>
+    </Box>
   );
-}
+};
 
 export default App;
